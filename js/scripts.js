@@ -1,11 +1,18 @@
 window.onload = () => {
-
+  document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
+  
 }
 
 function getNumberArray(num) {
-  let outputArray = [0];
-  for (let i = 1; i <= num; i++) {
-    outputArray.push(i);
+  let outputArray = [];
+  if (num >= 0) {
+    for (let i = 0; i <= num; i++) {
+      outputArray.push(i);
+    }
+  } else {
+    for (let i = 0; i >= num; i--) {
+      outputArray.push(i);
+    }
   }
   return outputArray;
 }
