@@ -13,12 +13,16 @@ function getNumberArray(num) {
 function getConvertedNumber(num) {
   let numberString = num.toString();
   let convertedNumber = num;
-  if (numberString.includes('1')) {
-    convertedNumber = 'Beep!';
+  if (numberString.includes('3')) {
+    convertedNumber = 'Won\'t you be my neighbor?';
   } else if (numberString.includes('2')) {
     convertedNumber = 'Boop!';
-  } else if (numberString.includes('3')) {
-    convertedNumber = 'Won\'t you be my neighbor?';
+  } else if (numberString.includes('1')) {
+    convertedNumber = 'Beep!';
   }
   return convertedNumber;
+}
+
+function getConvertedArray(numberArray) {
+  return numberArray.map(num => getConvertedNumber(num));
 }
