@@ -1,0 +1,23 @@
+:root {
+  --actual-height: 100vh;
+  --header-height: 4rem;
+  --main-width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+header {
+  height: var(--header-height);
+}
+
+body {
+  height: var(--actual-height);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen;
+}
+
+main {
+  width: var(--main-width);
+}
