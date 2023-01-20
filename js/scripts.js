@@ -25,6 +25,8 @@ window.onload = () => {
       `
     });
   });
+  document.getElementById('language-select').addEventListener('pointerdown', handleLanguageSelectClick);
+  [...document.getElementById('language-menu').children].forEach(element => setLanguageClickHandlers(element))
 }
 
 // business logic
@@ -47,7 +49,7 @@ function getConvertedNumber(num) {
   let numberString = num.toString();
   let convertedNumber = num;
   if (numberString.includes('3')) {
-    convertedNumber = 'Won\'t you be my neighbor?';
+    convertedNumber = `Won't you be my ${document.body.classList.contains('gb') ? 'neighbour' : 'neighbor'}?`;
   } else if (numberString.includes('2')) {
     convertedNumber = 'Boop!';
   } else if (numberString.includes('1')) {
@@ -62,6 +64,31 @@ function getConvertedArray(numberArray) {
 
 // UI logic
 
+function handleLanguageSelectClick(e) {
+  document.getElementById('language-menu').classList.toggle('open');
+}
+
+function setLanguageClickHandlers(element) {
+  let language = element.id.split('-')[0];
+  element.addEventListener('pointerdown', async () => {
+    document.body.classList = [language];
+    document.getElementById('flag-display').src = `media/${language}.svg`
+    await pause(200);
+    document.getElementById('language-menu').classList.remove('open');
+    changeExistingText(language)
+  })
+}
+
+function changeExistingText(newLanguage) {
+  [...document.getElementById('output-area').children].forEach(row => {
+    let textArea = row.children[1];
+    let correct = newLanguage === 'us' ? 'neighbor' : 'neighbour';
+    let incorrect = newLanguage === 'us' ? 'neighbour' : 'neighbor';
+    if (textArea.innerText.includes(incorrect)) {
+      textArea.innerText = textArea.innerText.replace(incorrect, correct);
+    }
+  })
+}
 
 // utility functions
 

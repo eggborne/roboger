@@ -8,8 +8,19 @@
   <script src="js/scripts.js"></script>
   <title>Mr. Roboger's Neighborhood</title>
 </head>
-<body>
-  <header class="shadow-text">Mr. Roboger's Neighborhood</header>
+<body class="us">
+  <header class="shadow-text">
+    <p>Mr. Roboger's Neighborhood</p>
+    <div id="language-menu">
+      <img class="flag-svg menu" id="us-svg" src="media/US.svg">
+      <img class="flag-svg menu" id="gb-svg" src="media/GB.svg">
+    </div>
+    <div id="language-select">
+      <img id="flag-display" class="flag-svg" src="media/US.svg">
+      <div class="down-caret shadow-text"></div>
+    </div>
+    
+  </header>
   <main>
     <form id="number-form">
       <label for="number-input">
@@ -23,6 +34,7 @@
     </ul>
   </main>
   <footer class="center-flex">
-    <p>made for <a href="https://epicodus.com"> Epicodus</a> by <a href="mailto:mike@mikedonovan.dev">mike@mikedonovan.dev</a></p></footer>
+    <p>made for <a href="https://epicodus.com"> Epicodus</a> by <a href="mailto:mike@mikedonovan.dev">mike@mikedonovan.dev</a></p>
+  </footer>
 </body>
 </html>
