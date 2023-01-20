@@ -4,29 +4,14 @@ window.onload = () => {
     let containsNumber = e.target.value && typeof parseInt(e.target.value) === 'number';
     document.getElementById('submit-button').disabled = !containsNumber;
   })
-  document.getElementById('number-form').addEventListener('submit', async e => {
-    e.preventDefault();
-    if (document.querySelector('#output-area > li')) {
-      console.warn('empty')
-      document.getElementById('output-area').style.opacity = 0;
-      await pause(300); // wait for fade out
-      document.getElementById('output-area').innerHTML = '';
+  document.getElementById('number-form').addEventListener('submit', handleSubmitClick);
+  document.getElementById('language-select-button').addEventListener('pointerdown', handleLanguageSelectClick);
+  [...document.getElementById('language-menu').children].forEach(element => setLanguageClickHandlers(element));
+  document.querySelector('main').addEventListener('pointerdown', () => {
+    if (document.getElementById('language-menu').classList.contains('open')) {
+      document.getElementById('language-menu').classList.remove('open');
     }
-    document.getElementById('output-area').style.opacity = 1;
-    let submittedNumber = parseInt(document.getElementById('number-input').value);
-    let numberArray = getNumberArray(submittedNumber);
-    let convertedArray = getConvertedArray(numberArray);
-    convertedArray.forEach((item, i) => {
-      document.getElementById('output-area').innerHTML += `
-        <li>
-          <div class="center-flex">${numberArray[i]}</div>
-          <div class="center-flex">${item}</div>
-        </li>
-      `
-    });
   });
-  document.getElementById('language-select').addEventListener('pointerdown', handleLanguageSelectClick);
-  [...document.getElementById('language-menu').children].forEach(element => setLanguageClickHandlers(element))
 }
 
 // business logic
@@ -63,6 +48,42 @@ function getConvertedArray(numberArray) {
 }
 
 // UI logic
+
+async function handleSubmitClick(e) {
+  e.preventDefault();
+  if (document.querySelector('#output-area > li')) {
+    document.getElementById('output-area').style.opacity = 0;
+    await pause(300); // wait for fade out
+    document.getElementById('output-area').innerHTML = '';
+  }
+  document.getElementById('output-area').style.opacity = 1;
+  let submittedNumber = parseInt(document.getElementById('number-input').value);
+  let numberArray = getNumberArray(submittedNumber);
+  let convertedArray = getConvertedArray(numberArray);
+  // convertedArray.forEach((item, i) => {
+  //   document.getElementById('output-area').innerHTML += `
+  //     <li>
+  //       <div class="center-flex">${numberArray[i]}</div>
+  //       <div class="center-flex">${item}</div>
+  //     </li>
+  //   `
+  // });
+  for (let i = 0; i < convertedArray.length; i++) {
+    let newRow = document.createElement('li');
+    newRow.innerHTML = `
+      <div class="center-flex">${numberArray[i]}</div>
+      <div class="center-flex">${convertedArray[i]}</div>
+    `;
+    if (i % 2 === 0) {
+      newRow.classList.add('from-right');;
+    }
+    document.getElementById('output-area').append(newRow);
+    requestAnimationFrame(() => {
+      newRow.classList.add('showing');
+    })
+    await pause(100);
+  }
+}
 
 function handleLanguageSelectClick(e) {
   document.getElementById('language-menu').classList.toggle('open');
