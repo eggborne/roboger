@@ -6,7 +6,7 @@
 
 ## Description
 
-A website that produces whimsical output based on a number submitted by the user.
+A website that produces a whimsical yet logical output based on a number submitted by the user.
 
 ## Technologies Used:
 * HTML
@@ -32,6 +32,7 @@ This software has no license.
 
 > Describe: getNumberArray()
 
+```
 Test: "It should return an array of numbers from 0 to the user's inputted number"
 Code: getNumberArray(5);
 Expected Output: [0, 1, 2, 3, 4, 5]
@@ -39,9 +40,11 @@ Expected Output: [0, 1, 2, 3, 4, 5]
 Test: "It should work as expected with negative numbers"
 Code: getNumberArray(-5);
 Expected Output: [0, -1, -2, -3, -4, -5]
+```
 
 > Describe: getConvertedNumber()
 
+```
 Test: "It should change 1 to "Beep!"
 Code: getConvertedNumber(1);
 Expected Output: "Beep!"
@@ -65,9 +68,11 @@ Expected Output: "Boop!"
 Test: "It should change a multi-digit number containing a 1 (and no 2s or 3s) to "Beep!"
 Code: getConvertedNumber(145);
 Expected Output: "Beep!"
+```
 
 > Describe: getConvertedArray()
 
+```
 Test: "It should change [0,1,2,3,4,5] to [0, "Beep!", "Boop!", "Won't you be my neighbor?", 4, 5]
 Code: getConvertedArray([0,1,2,3,4,5]);
 Expected Output: [0, "Beep!", "Boop!", "Won't you be my neighbor?", 4, 5]
@@ -79,5 +84,6 @@ Expected Output: [0, "Beep!", "Boop!", "Won't you be my neighbor?", 4, 5]
 Test: "It should change [0,1,2,3,4,5,6,7,8,9,10,11,12,13] to [0, "Beep!", "Boop!", "Won't you be my neighbor?", 4, 5, 6, 7, 8, 9, "Beep!", "Beep!", "Boop!", "Won't you be my neighbor?"]
 Code: getConvertedArray([0,1,2,3,4,5,6,7,8,9,10,11,12,13]);
 Expected Output: [0, "Beep!", "Boop!", "Won't you be my neighbor?", 4, 5, 6, 7, 8, 9, "Beep!", "Beep!", "Boop!", "Won't you be my neighbor?"]
+```
 
 
