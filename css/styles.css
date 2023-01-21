@@ -36,19 +36,18 @@ body {
   justify-content: space-between;
   background-color: var(--main-bg-color);
   overflow-x: hidden;
-  /* overflow-y: scroll; */
   opacity: 0;
 }
 
 body.revealed {
   opacity: 1;
-  transition: opacity 200ms ease, background-color 150ms ease;
+  transition: opacity 300ms ease;
 }
 
 body.darkmode {
   --main-bg-color: #181818;
   --header-color: #111111;
-  --main-text-color: #636363;
+  --main-text-color: #828282;
   --shadow-text-color: rgb(122, 122, 122);
   --pressed-button-color: #9fc19f47;
   --link-color: rgb(70, 91, 67);
@@ -60,7 +59,7 @@ body.princemode {
   --main-text-color: #bbc06c;
   --shadow-text-color: rgb(148, 162, 69);
   --pressed-button-color: #e8f35329;
-  --link-color: rgb(228, 232, 189);
+  --link-color: rgb(187, 187, 34);
   --font-style: 'Purple Rain';
   --text-shadow: 0px 0px 0.25rem rgb(118, 124, 29);
   font-size: 1.5rem;
@@ -84,6 +83,7 @@ body.princemode > header p {
   transform-origin: left;
   font-size: 1.25rem;
   width: 43%;
+  padding-left: 0.7rem;
 }
 
 body.princemode > footer > p {
@@ -96,12 +96,21 @@ body.princemode #output-area li p {
   text-shadow: 0px 0px 0.5rem rgb(1, 0, 0);
   transform-origin: right;
   transform: scaleX(1.15);
+  padding-right: 0.5rem;
+}
+
+body.princemode #output-area div:first-child {
+  padding: 0 0.25rem;
+  padding-bottom: 0.35rem;
+}
+
+body.princemode #output-area li {
+  height: 3rem;
 }
 
 body.princemode input#number-input {
   padding-bottom: 1rem;
   height: 2.9rem;
-  box-sizing: border-box;
   background-image: linear-gradient(0deg, var(--main-bg-color), #46480f3f, var(--main-bg-color));
 }
 body.princemode #number-form p {
@@ -115,13 +124,13 @@ body.princemode button {
 
 input, button {
   border-radius: 0.3rem;
-  transition: background-color 150ms ease;
 }
 
 input {
   background-color: var(--main-bg-color);
   color: var(--main-text-color);
   min-width: 4rem;
+  box-sizing: border-box;
 }
 
 button {
@@ -294,6 +303,10 @@ main {
   gap: 1rem;
 }
 
+#number-form > .curve-knob {
+  display: none;
+}
+
 #number-form > label {
   display: flex;
   align-items: center;
@@ -335,14 +348,17 @@ button#submit-button:disabled {
   width: calc(var(--main-width) - (var(--list-margin) * 2));
   gap: 0.5rem;
   list-style: none;
-  border-radius: 0.75rem;
+  border-radius: 1.25rem;
   opacity: 0;
   transition: opacity 300ms ease;
   overflow-x: hidden;
 }
 
 #output-area > li {
-  height: 2rem;
+  height: 2.25rem;
+  align-self: center;
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -361,12 +377,12 @@ button#submit-button:disabled {
 #output-area > li.showing {
   transform: none;
   opacity: 1;
-  box-shadow: 0 0 0.1rem #00000077;
+  /* box-shadow: 0 0 0.2rem #000000c4; */
 }
 
 #output-area > li > div:first-child {
   border-radius: 0.3rem 0 0 0.3rem;
-  width: 2rem;
+  width: 2.25rem;
   background-color: #00000022;
 }
 
@@ -376,6 +392,7 @@ button#submit-button:disabled {
   justify-content: flex-end;
   background-color: #00000011;
   padding: 0 0.5rem;
+  padding-bottom: 0.2rem;
   text-align: right;
 }
 
@@ -396,14 +413,57 @@ footer {
   }
 
   #number-form {
+    position: relative;
     border-radius: 0 0 2rem 2rem;
     height: var(--header-height);
-    padding: 2rem;
-    padding-bottom: 2.5rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  #number-form > .curve-knob {
+    display: block;
+    position: absolute;
+    background-color: var(--main-bg-color);
+    width: var(--header-height);
+    height: var(--header-height);
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    translate: -100% 0;
+    z-index: 1;
+  }
+
+  #number-form > .curve-knob.right {
+    left: unset;
+    right: 0;
+    translate: 100% 0;
+  }
+
+  #number-form::before {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: inherit;
+    width: calc(var(--header-height) * 0.5);
+    height: calc(var(--header-height) * 0.5);
+    top: 0;
+    left: 0;
+    translate: -100% 0;
+  }
+  #number-form::after {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: inherit;
+    width: calc(var(--header-height) * 0.5);
+    height: calc(var(--header-height) * 0.5);
+    top: 0;
+    right: 0;
+    translate: 100% 0;
   }
 
   #output-area {    
     width: 24rem;
+    overflow: unset;
   }
 
   #number-form > label > p {
