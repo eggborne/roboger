@@ -64,6 +64,12 @@ function handleNumberInput(e) {
 async function handleSubmitClick(e) {
   e.preventDefault();
   let submittedNumber = parseInt(document.getElementById('number-input').value);
+  let rowTransitionMS = getTransitionForNumber(submittedNumber);
+  
+  document.documentElement.style.setProperty('--reveal-speed', rowTransitionMS + 'ms')
+  let revealNextIn = Math.round(rowTransitionMS / 2);
+  console.log('rowtranstiion is', rowTransitionMS)
+  console.log('reveal next in', revealNextIn)
   document.getElementById('number-input').value = '';
   document.getElementById('submit-button').disabled = true;
   generating = true;
@@ -87,7 +93,7 @@ async function handleSubmitClick(e) {
     document.getElementById('output-area').append(newRow);
     await pause(20);
     newRow.classList.add('showing');
-    await pause(100);
+    await pause(revealNextIn);
   }
   generating = false;
   let containsNumber = document.getElementById('number-input').value && typeof parseInt(document.getElementById('number-input').value) === 'number';
@@ -206,4 +212,18 @@ function loadPrinceFont() {
   princeFont.load().then(() => {
     console.warn(`loaded font in ${Date.now() - started}`);
   });
+}
+
+function getTransitionForNumber(num) {
+  let rowTransitionMS;
+  if (num >= 100) {
+    rowTransitionMS = 0;
+  } else if (num >= 50) {
+    rowTransitionMS = 120;
+  } else if (num >= 20) {
+    rowTransitionMS = 200;
+  } else {
+    rowTransitionMS = 300;
+  }
+  return rowTransitionMS;
 }
