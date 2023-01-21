@@ -1,17 +1,10 @@
 window.onload = () => {
   document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
-  document.getElementById('number-input').addEventListener('input', e => {
-    let containsNumber = e.target.value && typeof parseInt(e.target.value) === 'number';
-    document.getElementById('submit-button').disabled = !containsNumber;
-  })
+  document.getElementById('number-input').addEventListener('input', handleNumberInput);
   document.getElementById('number-form').addEventListener('submit', handleSubmitClick);
   document.getElementById('language-select-button').addEventListener('pointerdown', handleLanguageSelectClick);
+  document.querySelector('main').addEventListener('pointerdown', closeMenuIfOpen);
   [...document.getElementById('language-menu').children].forEach(element => setLanguageClickHandlers(element));
-  document.querySelector('main').addEventListener('pointerdown', () => {
-    if (document.getElementById('language-menu').classList.contains('open')) {
-      document.getElementById('language-menu').classList.remove('open');
-    }
-  });
 }
 
 // business logic
@@ -49,6 +42,11 @@ function getConvertedArray(numberArray) {
 
 // UI logic
 
+function handleNumberInput(e) {
+  let containsNumber = e.target.value && typeof parseInt(e.target.value) === 'number';
+  document.getElementById('submit-button').disabled = !containsNumber;
+}
+
 async function handleSubmitClick(e) {
   e.preventDefault();
   if (document.querySelector('#output-area > li')) {
@@ -60,14 +58,6 @@ async function handleSubmitClick(e) {
   let submittedNumber = parseInt(document.getElementById('number-input').value);
   let numberArray = getNumberArray(submittedNumber);
   let convertedArray = getConvertedArray(numberArray);
-  // convertedArray.forEach((item, i) => {
-  //   document.getElementById('output-area').innerHTML += `
-  //     <li>
-  //       <div class="center-flex">${numberArray[i]}</div>
-  //       <div class="center-flex">${item}</div>
-  //     </li>
-  //   `
-  // });
   for (let i = 0; i < convertedArray.length; i++) {
     let newRow = document.createElement('li');
     newRow.innerHTML = `
@@ -93,14 +83,14 @@ function setLanguageClickHandlers(element) {
   let language = element.id.split('-')[0];
   element.addEventListener('pointerdown', async () => {
     document.body.classList = [language];
-    document.getElementById('flag-display').src = `media/${language}.svg`
+    document.getElementById('flag-display').src = `media/${language}.svg`;
     await pause(200);
     document.getElementById('language-menu').classList.remove('open');
-    changeExistingText(language)
-  })
+    changeExistingTextLanguage(language)
+  });
 }
 
-function changeExistingText(newLanguage) {
+function changeExistingTextLanguage(newLanguage) {
   [...document.getElementById('output-area').children].forEach(row => {
     let textArea = row.children[1];
     let correct = newLanguage === 'us' ? 'neighbor' : 'neighbour';
@@ -108,7 +98,13 @@ function changeExistingText(newLanguage) {
     if (textArea.innerText.includes(incorrect)) {
       textArea.innerText = textArea.innerText.replace(incorrect, correct);
     }
-  })
+  });
+}
+
+function closeMenuIfOpen() {
+  if (document.getElementById('language-menu').classList.contains('open')) {
+    document.getElementById('language-menu').classList.remove('open');
+  }
 }
 
 // utility functions
