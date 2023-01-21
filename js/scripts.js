@@ -4,7 +4,7 @@ const options = {
 };
 
 window.onload = () => {
-  document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
+  setDimensions();
   document.getElementById('number-input').addEventListener('input', handleNumberInput);
   document.getElementById('number-form').addEventListener('submit', handleSubmitClick);
   document.getElementById('themes-select-button').addEventListener('pointerdown', handleThemeSelectClick);
@@ -12,6 +12,7 @@ window.onload = () => {
   document.querySelector('main').addEventListener('pointerdown', closeMenusIfOpen);
   [...document.getElementById('themes-menu').children].forEach(element => setMenuClickHandlers(element.id));
   [...document.getElementById('languages-menu').children].forEach(element => setMenuClickHandlers(element.id));
+  document.body.classList.add('revealed');
 }
 
 // business logic
@@ -56,9 +57,10 @@ function handleNumberInput(e) {
 
 async function handleSubmitClick(e) {
   e.preventDefault();
+  document.getElementById('submit-button').disabled = true;
   if (document.querySelector('#output-area > li')) {
     document.getElementById('output-area').style.opacity = 0;
-    await pause(300); // wait for fade out
+    await pause(150); // wait for fade out
     document.getElementById('output-area').innerHTML = '';
   }
   document.getElementById('output-area').style.opacity = 1;
@@ -75,11 +77,11 @@ async function handleSubmitClick(e) {
       newRow.classList.add('from-right');;
     }
     document.getElementById('output-area').append(newRow);
-    requestAnimationFrame(() => {
-      newRow.classList.add('showing');
-    })
+    await pause(20);
+    newRow.classList.add('showing');
     await pause(100);
   }
+  document.getElementById('submit-button').disabled = false;
 }
 
 function handleLanguageSelectClick(e) {
@@ -95,20 +97,31 @@ function handleThemeSelectClick(e) {
 function setMenuClickHandlers(elementID) {
   let menuChoice = elementID.split('-')[0];
   let element = document.getElementById(elementID);
-  element.addEventListener('pointerdown', async () => {
-    console.warn('CHOSE', menuChoice);
+  element.addEventListener('pointerdown', async (e) => {
+    document.getElementById('submit-button').style.pointerEvents = 'none';
     replaceOptionClass(elementID, menuChoice);
     let imageExt = options.themes.indexOf(menuChoice) === -1 ? 'svg' : 'png';
     let optionType = typeOfOption(menuChoice);
+    e.target.classList.add('pressed');
+    let otherChoices = options[optionType].filter(optionName => !document.body.classList.contains(optionName));
+    otherChoices.forEach(choiceName => {
+      document.getElementById(`${choiceName}-button`).classList.remove('pressed');;
+    });
+
     document.getElementById(`${optionType}-display`).src = `media/${menuChoice}.${imageExt}`;
-    await pause(200);
+    await pause(75); // pause to show new choice highlighted
     document.getElementById(`${optionType}-menu`).classList.remove('open');
-    changeExistingTextLanguage(menuChoice);
+    if (optionType === 'languages') {
+      changeExistingTextLanguage(menuChoice);
+    }
+    setTimeout(() => {
+      document.getElementById('submit-button').style.pointerEvents = 'all';
+    }, 150);
   });
 }
 
 function changeExistingTextLanguage(newLanguage) {
-  let isUK = newLanguage === 'gb';
+  let isGB = newLanguage === 'gb';
   [...document.getElementById('output-area').children].forEach(row => {
     let textArea = row.children[1];
     let correct = isGB ? 'neighbour' : 'neighbor';
@@ -117,7 +130,7 @@ function changeExistingTextLanguage(newLanguage) {
       textArea.innerText = textArea.innerText.replace(incorrect, correct);
     }
   });
-  let properTitle = `Mr. Roboger's Neighbo${isUK ? 'u' : 'o'}rhood`;
+  let properTitle = `Mr. Roboger's Neighbo${isGB ? 'u' : ''}rhood`;
   document.querySelector('header > p:first-child').innerText = properTitle;
   document.title = properTitle;
 }
@@ -138,10 +151,8 @@ function replaceOptionClass(elementID, newClass) {
   classArray.forEach(className => {
     if (className === newClass) {
       classToAdd = undefined;
-      console.log('already has class', className);
     } else if (options[newType].includes(className)) {
       document.body.classList.remove(className);
-      console.log('removing class', className, 'of same type', newType);
     }
   });
   if (classToAdd) {
@@ -161,4 +172,9 @@ function typeOfOption(option) {
     };
   };
   return optionType;
+}
+
+function setDimensions() {
+  document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
+  window.onresize = () => document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
 }
