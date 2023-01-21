@@ -4,6 +4,7 @@
   --footer-height: 2rem;
   --main-width: 100vw;
   --list-margin: 2.5rem;
+  --reveal-speed: 300ms;
 
   --main-bg-color: #eeeeee;
   --header-color: #c6b8b8;
@@ -366,7 +367,7 @@ button#submit-button:disabled {
   border-radius: 0.3rem;
   transform: translateX(-100%);
   opacity: 0;
-  transition: transform 300ms ease-in, opacity 150ms ease;
+  transition: transform var(--reveal-speed) ease-in, opacity 150ms ease;
 }
 
 #output-area > li.from-right {
