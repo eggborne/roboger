@@ -5,39 +5,43 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/styles.css" type="text/css">
-  <script src="js/scripts.js"></script>
+  <link rel="preload" href="media/purplerain.ttf" as="font" crossorigin="anonymous" />
+<link rel="preload" href="media/purplerain.ttf" as="font" type="font/woff2" crossorigin>
+  <script type="module" src="js/scripts.js"></script>
   <title>Mr. Roboger's Neighborhood</title>
 </head>
 <body class="us lightmode">
   <header class="shadow-text">
-    <p>Mr. Roboger's Neighborhood</p>
-    <menu class="header-menu" id="themes-menu">
-      <li role="button" class="menu-item center-flex pressed" id="lightmode-button">
-        <img src="media/lightmode.png">
-      </li>
-      <li role="button" class="menu-item center-flex" id="darkmode-button">
-        <img src="media/darkmode.png">
-      </li>
-      <li role="button" class="menu-item center-flex" id="princemode-button">
-        <img src="media/princemode.png">
-      </li>
-    </menu>
-    <menu class="header-menu" id="languages-menu">
-      <li role="button" class="menu-item center-flex pressed" id="us-button">
-        <img src="media/us.svg">
-      </li>
-      <li role="button" class="menu-item center-flex" id="gb-button">
-        <img src="media/gb.svg">
-      </li>
-    </menu>
-    <div id="header-button-area">
-      <div role="button" class="header-button" id="themes-select-button">
-        <img id="themes-display" src="media/lightmode.png">
-        <div class="down-caret shadow-text"></div>
-      </div>
-      <div role="button" class="header-button" id="languages-select-button">
-        <img id="languages-display" src="media/us.svg">
-        <div class="down-caret shadow-text"></div>
+    <div id="header-container">
+      <p>Mr. Roboger's Neighborhood</p>
+      <div id="header-button-area">
+        <div role="button" class="header-button" id="themes-select-button">
+          <img id="themes-display" src="media/lightmode.png">
+          <div class="down-caret shadow-text"></div>
+          <menu class="header-menu" id="themes-menu">
+            <li role="button" class="menu-item center-flex pressed" id="lightmode-button">
+              <img src="media/lightmode.png">
+            </li>
+            <li role="button" class="menu-item center-flex" id="darkmode-button">
+              <img src="media/darkmode.png">
+            </li>
+            <li role="button" class="menu-item center-flex" id="princemode-button">
+              <img src="media/princemode.png">
+            </li>
+          </menu>
+        </div>
+        <div role="button" class="header-button" id="languages-select-button">
+          <img id="languages-display" src="media/us.svg">
+          <div class="down-caret shadow-text"></div>
+          <menu class="header-menu" id="languages-menu">
+            <li role="button" class="menu-item center-flex pressed" id="us-button">
+              <img src="media/us.svg">
+            </li>
+            <li role="button" class="menu-item center-flex" id="gb-button">
+              <img src="media/gb.svg">
+            </li>
+          </menu>
+        </div>
       </div>
     </div>
   </header>
@@ -49,8 +53,7 @@
       </label>
       <button disabled type="submit" id="submit-button">Submit</button>
     </form>
-    <ul id="output-area">
-    </ul>
+    <ul id="output-area"></ul>
   </main>
   <footer class="center-flex">
     <p>made for <a href="https://epicodus.com"> Epicodus</a> by <a href="mailto:mike@mikedonovan.dev">mike@mikedonovan.dev</a></p>
