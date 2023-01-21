@@ -59,10 +59,11 @@ body.princemode {
   --main-text-color: #bbc06c;
   --shadow-text-color: rgb(148, 162, 69);
   --pressed-button-color: #e8f35329;
-  --link-color: rgb(115, 121, 61);
+  --link-color: rgb(180, 187, 117);
   --font-style: 'Purple Rain';
-  --text-shadow: 0px 0px 0.35rem rgb(118, 124, 29);
+  --text-shadow: 0px 0px 0.25rem rgb(118, 124, 29);
   font-size: 1.5rem;
+  background-image: linear-gradient(90deg, var(--main-bg-color), #46480f3f, var(--main-bg-color));
 
 }
 
@@ -85,11 +86,15 @@ body.princemode input#number-input {
   padding-bottom: 1rem;
   max-height: 100%;
   box-sizing: border-box;
-
+  background-image: linear-gradient(0deg, var(--main-bg-color), #46480f3f, var(--main-bg-color));
 }
 body.princemode #number-form p {
   font-size: 1.5rem;
   line-height: 90%;
+}
+
+body.princemode button {
+  background-image: radial-gradient(var(--main-bg-color), #46480f3f, var(--main-bg-color));
 }
 
 input, button {
