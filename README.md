@@ -42,6 +42,7 @@ Code: getNumberArray(-5);
 Expected Output: [0, -1, -2, -3, -4, -5]
 ```
 
+
 > Describe: getConvertedNumber()
 
 ```
@@ -69,6 +70,7 @@ Test: "It should change a multi-digit number containing a 1 (and no 2s or 3s) to
 Code: getConvertedNumber(145);
 Expected Output: "Beep!"
 ```
+
 
 > Describe: getConvertedArray()
 
