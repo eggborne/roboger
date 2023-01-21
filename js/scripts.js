@@ -120,6 +120,10 @@ function setMenuClickHandlers(elementID) {
       document.getElementById(`${choiceName}-button`).classList.remove('pressed');;
     });
     document.getElementById(`${optionType}-display`).src = `media/${menuChoice}.${imageExt}`;
+    if (optionType === 'themes') {
+      let headerColor = getComputedStyle(document.body).getPropertyValue('--header-color');
+      document.querySelector('meta[name="theme-color"]').setAttribute("content", headerColor);
+    }
     await pause(75); // pause to show new choice highlighted
     document.getElementById(`${optionType}-menu`).classList.remove('open');
   });
@@ -128,7 +132,7 @@ function setMenuClickHandlers(elementID) {
 function changeExistingTextLanguage() {
   let isGB = document.body.classList.contains('gb');
   let isPrinceMode = document.body.classList.contains('princemode');
-  let neighbor = { correct: isGB ? 'neighbour' : 'neighbor', incorrect: isGB ? 'neighbor' : 'neighbour'} 
+  let neighbor = { correct: isGB ? 'neighbour' : 'neighbor', incorrect: isGB ? 'neighbor' : 'neighbour'};
   let youBe = { correct: isPrinceMode ? ' U B ' : ' you be ', incorrect: isPrinceMode ? ' you be ' : ' U B '};
   let for4 = { correct: isPrinceMode ? ' 4 ' : ' for ', incorrect: isPrinceMode ? ' for ' : ' 4 '};
   [...document.getElementById('output-area').children].forEach(row => {
