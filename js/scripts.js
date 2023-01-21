@@ -1,9 +1,12 @@
+let jsStarted = Date.now();
+loadPrinceFont();
+
 const options = {
   themes: ['lightmode', 'darkmode', 'princemode'],
   languages: ['us', 'gb'],
 };
 
-window.onload = () => {
+window.onload = async () => {
   setDimensions();
   document.getElementById('number-input').addEventListener('input', handleNumberInput);
   document.getElementById('number-form').addEventListener('submit', handleSubmitClick);
@@ -12,7 +15,10 @@ window.onload = () => {
   document.querySelector('main').addEventListener('pointerdown', closeMenusIfOpen);
   [...document.getElementById('themes-menu').children].forEach(element => setMenuClickHandlers(element.id));
   [...document.getElementById('languages-menu').children].forEach(element => setMenuClickHandlers(element.id));
-  document.body.classList.add('revealed');
+  requestAnimationFrame(() => {
+    document.body.classList.add('revealed');
+    console.log('end of onload', (Date.now() - jsStarted));
+  });
 }
 
 // business logic
@@ -35,7 +41,7 @@ function getConvertedNumber(num) {
   let numberString = num.toString();
   let convertedNumber = num;
   if (numberString.includes('3')) {
-    convertedNumber = `Won't you be my ${document.body.classList.contains('gb') ? 'neighbour' : 'neighbor'}?`;
+    convertedNumber = `Won't ${document.body.classList.contains('princemode') ? 'U B' : 'you be'} my neighbo${document.body.classList.contains('gb') ? 'u' : ''}r?`;
   } else if (numberString.includes('2')) {
     convertedNumber = 'Boop!';
   } else if (numberString.includes('1')) {
@@ -57,6 +63,8 @@ function handleNumberInput(e) {
 
 async function handleSubmitClick(e) {
   e.preventDefault();
+  let submittedNumber = parseInt(document.getElementById('number-input').value);
+  document.getElementById('number-input').value = '';
   document.getElementById('submit-button').disabled = true;
   if (document.querySelector('#output-area > li')) {
     document.getElementById('output-area').style.opacity = 0;
@@ -64,14 +72,13 @@ async function handleSubmitClick(e) {
     document.getElementById('output-area').innerHTML = '';
   }
   document.getElementById('output-area').style.opacity = 1;
-  let submittedNumber = parseInt(document.getElementById('number-input').value);
   let numberArray = getNumberArray(submittedNumber);
   let convertedArray = getConvertedArray(numberArray);
   for (let i = 0; i < convertedArray.length; i++) {
     let newRow = document.createElement('li');
     newRow.innerHTML = `
       <div class="center-flex">${numberArray[i]}</div>
-      <div class="center-flex">${convertedArray[i]}</div>
+      <div class="center-flex"><p>${convertedArray[i]}</p></div>
     `;
     if (i % 2 === 0) {
       newRow.classList.add('from-right');;
@@ -81,7 +88,7 @@ async function handleSubmitClick(e) {
     newRow.classList.add('showing');
     await pause(100);
   }
-  document.getElementById('submit-button').disabled = false;
+  // document.getElementById('submit-button').disabled = false;
 }
 
 function handleLanguageSelectClick(e) {
@@ -98,40 +105,42 @@ function setMenuClickHandlers(elementID) {
   let menuChoice = elementID.split('-')[0];
   let element = document.getElementById(elementID);
   element.addEventListener('pointerdown', async (e) => {
-    document.getElementById('submit-button').style.pointerEvents = 'none';
+    setStyleForDuration(document.getElementById('submit-button'), 'pointerEvents', 'none', 200);
     replaceOptionClass(elementID, menuChoice);
-    let imageExt = options.themes.indexOf(menuChoice) === -1 ? 'svg' : 'png';
+    changeExistingTextLanguage(menuChoice);
     let optionType = typeOfOption(menuChoice);
+    let imageExt = optionType === 'languages' ? 'svg' : 'png';
     e.target.classList.add('pressed');
     let otherChoices = options[optionType].filter(optionName => !document.body.classList.contains(optionName));
     otherChoices.forEach(choiceName => {
       document.getElementById(`${choiceName}-button`).classList.remove('pressed');;
     });
-
     document.getElementById(`${optionType}-display`).src = `media/${menuChoice}.${imageExt}`;
     await pause(75); // pause to show new choice highlighted
     document.getElementById(`${optionType}-menu`).classList.remove('open');
-    if (optionType === 'languages') {
-      changeExistingTextLanguage(menuChoice);
-    }
-    setTimeout(() => {
-      document.getElementById('submit-button').style.pointerEvents = 'all';
-    }, 150);
   });
 }
 
-function changeExistingTextLanguage(newLanguage) {
-  let isGB = newLanguage === 'gb';
+function changeExistingTextLanguage() {
+  console.log('changing existing text language')
+  let isGB = document.body.classList.contains('gb');
+  let isPrinceMode = document.body.classList.contains('princemode');
+  console.warn(isGB ? 'isGB' : undefined);
+  console.warn(isPrinceMode ? 'isPrinceMode' : undefined);
+  let neighbor = { correct: isGB ? 'neighbour' : 'neighbor', incorrect: isGB ? 'neighbor' : 'neighbour'} 
+  let youBe = { correct: isPrinceMode ? ' U B ' : ' you be ', incorrect: isPrinceMode ? ' you be ' : ' U B '};
+  let for4 = { correct: isPrinceMode ? ' 4 ' : ' for ', incorrect: isPrinceMode ? ' for ' : ' 4 '};
   [...document.getElementById('output-area').children].forEach(row => {
     let textArea = row.children[1];
-    let correct = isGB ? 'neighbour' : 'neighbor';
-    let incorrect = isGB ? 'neighbor' : 'neighbour';
-    if (textArea.innerText.includes(incorrect)) {
-      textArea.innerText = textArea.innerText.replace(incorrect, correct);
-    }
+    console.warn('changing li from', neighbor.incorrect, 'to', neighbor.correct)
+    textArea.innerHTML = textArea.innerHTML.replace(neighbor.incorrect, neighbor.correct);
+    textArea.innerHTML = textArea.innerHTML.replace(youBe.incorrect, youBe.correct);
   });
+  let footer = document.querySelector('footer > p');
+  console.warn('changing footer from', for4.incorrect, 'to', for4.correct)
+  footer.innerHTML = footer.innerHTML.replace(for4.incorrect, for4.correct);
   let properTitle = `Mr. Roboger's Neighbo${isGB ? 'u' : ''}rhood`;
-  document.querySelector('header > p:first-child').innerText = properTitle;
+  document.querySelector('header p:first-child').innerText = properTitle;
   document.title = properTitle;
 }
 
@@ -174,7 +183,24 @@ function typeOfOption(option) {
   return optionType;
 }
 
+function setStyleForDuration(element, styleName, setValue, duration) {
+  let oldValue = element.style[styleName];
+  element.style[styleName] = setValue;
+  setTimeout(() => {
+    element.style[styleName] = oldValue;
+  }, duration);
+}
+
 function setDimensions() {
   document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
   window.onresize = () => document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
+}
+
+function loadPrinceFont() {
+  let started = Date.now();
+  const princeFont = new FontFace('Purple Rain', 'url(../media/purplerain.ttf)');
+  document.fonts.add(princeFont);
+  princeFont.load().then(() => {
+    console.warn(`loaded font in ${Date.now() - started}`);
+  });
 }
