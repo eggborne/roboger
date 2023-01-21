@@ -6,6 +6,8 @@ const options = {
   languages: ['us', 'gb'],
 };
 
+let generating = false;
+
 window.onload = async () => {
   setDimensions();
   document.getElementById('number-input').addEventListener('input', handleNumberInput);
@@ -15,10 +17,8 @@ window.onload = async () => {
   document.querySelector('main').addEventListener('pointerdown', closeMenusIfOpen);
   [...document.getElementById('themes-menu').children].forEach(element => setMenuClickHandlers(element.id));
   [...document.getElementById('languages-menu').children].forEach(element => setMenuClickHandlers(element.id));
-  requestAnimationFrame(() => {
-    document.body.classList.add('revealed');
-    console.log('end of onload', (Date.now() - jsStarted));
-  });
+  document.body.classList.add('revealed');
+  console.warn('end of onload', (Date.now() - jsStarted));
 }
 
 // business logic
@@ -58,7 +58,7 @@ function getConvertedArray(numberArray) {
 
 function handleNumberInput(e) {
   let containsNumber = e.target.value && typeof parseInt(e.target.value) === 'number';
-  document.getElementById('submit-button').disabled = !containsNumber;
+  document.getElementById('submit-button').disabled = !containsNumber || generating;
 }
 
 async function handleSubmitClick(e) {
@@ -66,6 +66,7 @@ async function handleSubmitClick(e) {
   let submittedNumber = parseInt(document.getElementById('number-input').value);
   document.getElementById('number-input').value = '';
   document.getElementById('submit-button').disabled = true;
+  generating = true;
   if (document.querySelector('#output-area > li')) {
     document.getElementById('output-area').style.opacity = 0;
     await pause(150); // wait for fade out
@@ -88,7 +89,10 @@ async function handleSubmitClick(e) {
     newRow.classList.add('showing');
     await pause(100);
   }
-  // document.getElementById('submit-button').disabled = false;
+  generating = false;
+  let containsNumber = document.getElementById('number-input').value && typeof parseInt(document.getElementById('number-input').value) === 'number';
+  await pause(120);
+  document.getElementById('submit-button').disabled = !containsNumber
 }
 
 function handleLanguageSelectClick(e) {
@@ -122,22 +126,17 @@ function setMenuClickHandlers(elementID) {
 }
 
 function changeExistingTextLanguage() {
-  console.log('changing existing text language')
   let isGB = document.body.classList.contains('gb');
   let isPrinceMode = document.body.classList.contains('princemode');
-  console.warn(isGB ? 'isGB' : undefined);
-  console.warn(isPrinceMode ? 'isPrinceMode' : undefined);
   let neighbor = { correct: isGB ? 'neighbour' : 'neighbor', incorrect: isGB ? 'neighbor' : 'neighbour'} 
   let youBe = { correct: isPrinceMode ? ' U B ' : ' you be ', incorrect: isPrinceMode ? ' you be ' : ' U B '};
   let for4 = { correct: isPrinceMode ? ' 4 ' : ' for ', incorrect: isPrinceMode ? ' for ' : ' 4 '};
   [...document.getElementById('output-area').children].forEach(row => {
     let textArea = row.children[1];
-    console.warn('changing li from', neighbor.incorrect, 'to', neighbor.correct)
     textArea.innerHTML = textArea.innerHTML.replace(neighbor.incorrect, neighbor.correct);
     textArea.innerHTML = textArea.innerHTML.replace(youBe.incorrect, youBe.correct);
   });
   let footer = document.querySelector('footer > p');
-  console.warn('changing footer from', for4.incorrect, 'to', for4.correct)
   footer.innerHTML = footer.innerHTML.replace(for4.incorrect, for4.correct);
   let properTitle = `Mr. Roboger's Neighbo${isGB ? 'u' : ''}rhood`;
   document.querySelector('header p:first-child').innerText = properTitle;
