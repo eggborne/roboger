@@ -197,7 +197,7 @@ function setDimensions() {
 
 function loadPrinceFont() {
   let started = Date.now();
-  const princeFont = new FontFace('Purple Rain', 'url(../media/purplerain.ttf)');
+  const princeFont = new FontFace('Purple Rain', 'url(/../media/purplerain.ttf)');
   document.fonts.add(princeFont);
   princeFont.load().then(() => {
     console.warn(`loaded font in ${Date.now() - started}`);
