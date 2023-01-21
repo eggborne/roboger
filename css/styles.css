@@ -34,6 +34,10 @@ input, button {
   border-radius: 0.3rem;
 }
 
+li {
+  list-style-type: none;
+}
+
 .center-flex {
   display: flex;
   justify-content: center;
@@ -54,33 +58,53 @@ header {
   justify-content: space-between;
   font-size: 1.2rem;
   font-weight: bold;
-  padding: 0 1rem;
+  padding-left: 1rem;
   background-color: var(--header-color);
 }
 
-#language-select-button {
+#header-button-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.header-button {
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
+  height: 80%;
+  width: var(--header-height);
 }
 
-.flag-svg {
+#themes-select-button {
+  justify-self: flex-end !important;
+}
+
+.header-button > img {
   height: calc(var(--header-height) * 0.4);
 }
 
-#language-select-button > .flag-svg {
+#languages-select-button > img {
   height: calc(var(--header-height) * 0.35);
-
+  margin-top: 20%;
 }
 
-.flag-svg.menu {
-  transition: scale 200ms ease;
+#themes-select-button > img {
+  height: calc(var(--header-height) * 0.45);
+  margin-top: 12%;
 }
 
-body.gb #gb-svg, body.us #us-svg {
-  scale: 1.2;
+body.lightmode #lightmode-button,
+body.darkmode #darkmode-button,
+body.princemode #princemode-button,
+body.gb #gb-button,
+body.us #us-button {
+  opacity: 1;
+  background-color: #9fc19f;
+  border: 0.25rem inset rgba(0, 0, 0, 0.453)
 }
 
 .down-caret {
@@ -89,27 +113,49 @@ body.gb #gb-svg, body.us #us-svg {
   border-left: 0.5rem solid transparent;
   border-right: 0.5rem solid transparent;
   border-top: 0.5rem solid var(--shadow-text-color);
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
-#language-menu {
+.header-menu {
   position: absolute;
   top: var(--header-height);
   right: 0;
+  width: var(--header-height);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
+  align-items: stretch;
   background-color: var(--header-color);
+  padding: 0;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 300ms ease;
   z-index: 1;
 }
 
-#language-menu.open {
+.header-menu.open {
   opacity: 1;
+  pointer-events: all;
 }
+
+#themes-menu {
+  right: var(--header-height);
+}
+
+.menu-item {
+  opacity: 0.5;
+  min-height: var(--header-height);
+  background-color: #7c7373;
+  border: 0.25rem outset rgba(0, 0, 0, 0.453);
+}
+
+.header-button > img, .menu-item {
+  transition: opacity 150ms ease;
+}
+
+li.menu-item > img {
+  width: calc(var(--header-height) * 0.6);
+}
+
 
 a {
   text-decoration: none;

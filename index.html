@@ -8,20 +8,41 @@
   <script src="js/scripts.js"></script>
   <title>Mr. Roboger's Neighborhood</title>
 </head>
-<body class="us">
+<body class="us lightmode">
   <header class="shadow-text">
     <p>Mr. Roboger's Neighborhood</p>
-    <div id="language-menu">
-      <img class="flag-svg menu" id="us-svg" src="media/US.svg">
-      <img class="flag-svg menu" id="gb-svg" src="media/GB.svg">
-    </div>
-    <div id="language-select-button">
-      <img id="flag-display" class="flag-svg" src="media/US.svg">
-      <div class="down-caret shadow-text"></div>
+    <menu class="header-menu" id="themes-menu">
+      <li role="button" class="menu-item center-flex" id="lightmode-button">
+        <img src="media/lightmode.png">
+      </li>
+      <li role="button" class="menu-item center-flex" id="darkmode-button">
+        <img src="media/darkmode.png">
+      </li>
+      <li role="button" class="menu-item center-flex" id="princemode-button">
+        <img src="media/princemode.png">
+      </li>
+    </menu>
+    <menu class="header-menu" id="languages-menu">
+      <li role="button" class="menu-item center-flex" id="us-button">
+        <img src="media/US.svg">
+      </li>
+      <li role="button" class="menu-item center-flex" id="gb-button">
+        <img src="media/GB.svg">
+      </li>
+    </menu>
+    <div id="header-button-area">
+      <div role="button" class="header-button" id="themes-select-button">
+        <img alt="Light Mode icon" id="themes-display" src="media/lightmode.png">
+        <div class="down-caret shadow-text"></div>
+      </div>
+      <div role="button" class="header-button" id="languages-select-button">
+        <img alt="Flag of the United States" id="languages-display" src="media/US.svg">
+        <div class="down-caret shadow-text"></div>
+      </div>
     </div>
   </header>
   <main>
-    <form id="number-form">
+    <form id="number-form" autocomplete="off">
       <label for="number-input">
         <p>Enter a number:</p>
         <input type="number" id="number-input">

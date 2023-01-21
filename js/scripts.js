@@ -1,10 +1,17 @@
+const options = {
+  themes: ['lightmode', 'darkmode', 'princemode'],
+  languages: ['us', 'gb'],
+};
+
 window.onload = () => {
   document.documentElement.style.setProperty('--actual-height', window.innerHeight + 'px');
   document.getElementById('number-input').addEventListener('input', handleNumberInput);
   document.getElementById('number-form').addEventListener('submit', handleSubmitClick);
-  document.getElementById('language-select-button').addEventListener('pointerdown', handleLanguageSelectClick);
-  document.querySelector('main').addEventListener('pointerdown', closeMenuIfOpen);
-  [...document.getElementById('language-menu').children].forEach(element => setLanguageClickHandlers(element));
+  document.getElementById('themes-select-button').addEventListener('pointerdown', handleThemeSelectClick);
+  document.getElementById('languages-select-button').addEventListener('pointerdown', handleLanguageSelectClick);
+  document.querySelector('main').addEventListener('pointerdown', closeMenusIfOpen);
+  [...document.getElementById('themes-menu').children].forEach(element => setMenuClickHandlers(element.id));
+  [...document.getElementById('languages-menu').children].forEach(element => setMenuClickHandlers(element.id));
 }
 
 // business logic
@@ -76,37 +83,82 @@ async function handleSubmitClick(e) {
 }
 
 function handleLanguageSelectClick(e) {
-  document.getElementById('language-menu').classList.toggle('open');
+  document.getElementById('languages-menu').classList.toggle('open');
+  closeMenusIfOpen('languages')
 }
 
-function setLanguageClickHandlers(element) {
-  let language = element.id.split('-')[0];
+function handleThemeSelectClick(e) {
+  document.getElementById('themes-menu').classList.toggle('open');
+  closeMenusIfOpen('themes')
+}
+
+function setMenuClickHandlers(elementID) {
+  let menuChoice = elementID.split('-')[0];
+  let element = document.getElementById(elementID);
   element.addEventListener('pointerdown', async () => {
-    document.body.classList = [language];
-    document.getElementById('flag-display').src = `media/${language}.svg`;
+    console.warn('CHOSE', menuChoice);
+    replaceOptionClass(elementID, menuChoice);
+    let imageExt = options.themes.indexOf(menuChoice) === -1 ? 'svg' : 'png';
+    let optionType = typeOfOption(menuChoice);
+    document.getElementById(`${optionType}-display`).src = `media/${menuChoice}.${imageExt}`;
     await pause(200);
-    document.getElementById('language-menu').classList.remove('open');
-    changeExistingTextLanguage(language)
+    document.getElementById(`${optionType}-menu`).classList.remove('open');
+    changeExistingTextLanguage(menuChoice);
   });
 }
 
 function changeExistingTextLanguage(newLanguage) {
+  let isUK = newLanguage === 'gb';
   [...document.getElementById('output-area').children].forEach(row => {
     let textArea = row.children[1];
-    let correct = newLanguage === 'us' ? 'neighbor' : 'neighbour';
-    let incorrect = newLanguage === 'us' ? 'neighbour' : 'neighbor';
+    let correct = isGB ? 'neighbour' : 'neighbor';
+    let incorrect = isGB ? 'neighbor' : 'neighbour';
     if (textArea.innerText.includes(incorrect)) {
       textArea.innerText = textArea.innerText.replace(incorrect, correct);
     }
   });
+  let properTitle = `Mr. Roboger's Neighbo${isUK ? 'u' : 'o'}rhood`;
+  document.querySelector('header > p:first-child').innerText = properTitle;
+  document.title = properTitle;
 }
 
-function closeMenuIfOpen() {
-  if (document.getElementById('language-menu').classList.contains('open')) {
-    document.getElementById('language-menu').classList.remove('open');
+function closeMenusIfOpen(typeToKeep) {
+  if (typeToKeep !== 'themes' && document.getElementById('themes-menu').classList.contains('open')) {
+    document.getElementById('themes-menu').classList.remove('open');
+  }
+  if (typeToKeep !== 'languages' && document.getElementById('languages-menu').classList.contains('open')) {
+    document.getElementById('languages-menu').classList.remove('open');
+  }
+}
+
+function replaceOptionClass(elementID, newClass) {
+  let classToAdd = newClass;
+  let newType = typeOfOption(newClass);
+  let classArray = [...document.body.classList];
+  classArray.forEach(className => {
+    if (className === newClass) {
+      classToAdd = undefined;
+      console.log('already has class', className);
+    } else if (options[newType].includes(className)) {
+      document.body.classList.remove(className);
+      console.log('removing class', className, 'of same type', newType);
+    }
+  });
+  if (classToAdd) {
+    document.body.classList.add(classToAdd);
   }
 }
 
 // utility functions
 
 const pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+function typeOfOption(option) {
+  let optionType;
+  for (let type in options) {
+    if (options[type].includes(option)) {
+      optionType = type;
+    };
+  };
+  return optionType;
+}
